@@ -2,6 +2,10 @@
    --sidebar-width: 250px;
 }
 
+.btn {
+  color: white !important;
+}
+
 .card {
   margin-bottom: 50px;
   color: white;

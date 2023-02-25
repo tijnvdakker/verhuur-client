@@ -31,6 +31,7 @@ function ProductOverview() {
                     <th>Label</th>
                     <th>Prijs</th>
                     <th>Huidige voorraad</th>
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
             {
