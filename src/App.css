@@ -1,0 +1,45 @@
+:root {
+   --sidebar-width: 250px;
+}
+
+.card {
+  margin-bottom: 50px;
+  color: white;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product-select {
+  width: 100px;
+}
+
+.app {
+  display: flex;
+}
+
+.content {
+  width: calc(100% - var(--sidebar-width));
+}
+
+nav {
+  display: block;
+  width: var(--sidebar-width);
+  height: 100%;
+}
+
+.product-table tr td:first-child, .agreement-product-table tr td:first-child {
+  width: 30%;
+}
+
+.product-table tr td:nth-child(2), .agreement-product-table tr td:nth-child(2) {
+  width: 20%;
+}
+
+.badge {
+  color: white;
+  padding: 10px;
+  font-size: 15px;
+}
