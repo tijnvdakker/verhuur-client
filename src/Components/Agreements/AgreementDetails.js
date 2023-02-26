@@ -1,16 +1,13 @@
 import EditableText from "../Helpers/EditableText";
-import { getRequest, postRequest } from "../../Utils";
-import { useEffect, useState } from "react";
+import { objectArrayFromConcatenatedString, postRequest } from "../../Utils";
+import { useState } from "react";
 import AgreementProduct from "./AgreementProduct";
 import EditableNumber from "../Helpers/EditableNumber";
 
 function AgreementDetails({ products, agreement, loadAgreements }) {
-    let [agreementProducts, setAgreementProducts] = useState([]);
     let [selectedProductId, setSelectedProductId] = useState(1);
 
-    useEffect(() => {
-        loadAgreementProducts()
-    }, []);
+    let agreementProducts = objectArrayFromConcatenatedString(agreement.agreement_products);
 
     async function updateAgreementDescription(event) {
         let description = event.target.value;
@@ -28,16 +25,10 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
         await loadAgreements();
     }
 
-    async function loadAgreementProducts() {
-        let result = await getRequest('/agreement/products/' + agreement.agreement_id) || [];
-
-        setAgreementProducts(result.data.agreement_products);
-    }
-
     async function addAgreementProduct() {
         await postRequest('/agreement/add_product', { agreement_id: agreement.agreement_id, product_id: selectedProductId });
 
-        await loadAgreementProducts();
+        await loadAgreements();
     }
 
     async function deleteAgreement() {
@@ -50,11 +41,17 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
         <div className="card bg-dark">
             <div className="card-header">
                 <div>
-                    <h4><EditableText update={updateAgreementDescription} defaultValue={agreement.description} /></h4>
-                    <EditableNumber update={updateAgreementDeposit} defaultValue={agreement.deposit} />
-                    <a onClick={e => deleteAgreement()} className="btn btn-danger"><i className="las la-trash"></i></a>
+                    <h4 className="agreement-header">
+                        <EditableText update={updateAgreementDescription} defaultValue={agreement.description} /> &nbsp; (<i className="las la-pen"></i>) 
+                        <a onClick={e => deleteAgreement()} className="btn btn-danger"><i className="las la-trash"></i></a>
+                    </h4>
+                    <div className="flex">
+                        <span className="margin-right-50">Borg (€) (<i className="las la-pen"></i>)</span>
+                        <EditableNumber update={updateAgreementDeposit} defaultValue={agreement.deposit} />
+                    </div>
                 </div>
                 <div className="form-group">
+                    <label><b>Selecteer product</b></label>
                     <select value={selectedProductId} onChange={e => setSelectedProductId(e.target.value)} className="form-control product-select">
                         {
                             products.map(product => {
@@ -70,20 +67,25 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
                     <thead>
                         <tr>
                             <th>Naam</th>
-                            <th>Aantal</th>
-                            <th>Startdatum</th>
-                            <th>Einddatum</th>
+                            <th>Prijs</th>
+                            <th>Aantal (<i className="las la-pen"></i>)</th>
+                            <th>Subtotaal</th>
+                            <th>Startdatum (<i className="las la-pen"></i>)</th>
+                            <th>Einddatum (<i className="las la-pen"></i>)</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             agreementProducts.map(agreementProduct => {
-                                return <AgreementProduct agreementProduct={agreementProduct} loadAgreementProducts={loadAgreementProducts} />
+                                return <AgreementProduct key={agreementProduct.stock_id} agreementProduct={agreementProduct} loadAgreements={loadAgreements} />
                             })
                         }
                     </tbody>
                 </table>
+                <div>
+                    <h3><span className="badge bg-info">Totaalprijs: € {agreement.price}</span></h3>
+                </div>
             </div>
         </div>
     )

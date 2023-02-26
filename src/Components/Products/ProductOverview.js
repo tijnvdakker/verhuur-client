@@ -27,9 +27,9 @@ function ProductOverview() {
         <table className="table table-striped product-table">
             <thead>
                 <tr>
-                    <th>Naam</th>
-                    <th>Label</th>
-                    <th>Prijs</th>
+                    <th>Naam (<i className="las la-pen"></i>)</th>
+                    <th>Label (<i className="las la-pen"></i>)</th>
+                    <th>Prijs (<i className="las la-pen"></i>)</th>
                     <th>Huidige voorraad</th>
                     <th>&nbsp;</th>
                 </tr>

@@ -15,6 +15,7 @@ export async function getRequest(url) {
         });
     }   
    
+    console.log("Getrequest completed");
 
     return response;
 }
@@ -32,6 +33,7 @@ export async function postRequest(url, data = {}) {
         });
     }   
    
+    console.log("Postrequest completed");
 
     return response;
 }
@@ -40,4 +42,30 @@ export function enterDetector(e, functionToCall) {
     if (e.key === 'Enter') {
         functionToCall(e);
     }
+}
+
+export function objectArrayFromConcatenatedString(concatenatedString) {
+    if (!concatenatedString) {
+        return [];
+    }
+
+    let objects = [];
+    
+    let subString = concatenatedString.split(',');
+
+    subString.forEach(subStringPart => {
+        let object = {};
+
+        let pairs = subStringPart.split('|');
+
+        pairs.map(pair => {
+            let arrayPair = pair.split(':');
+
+            object[arrayPair[0]] = arrayPair[1];
+        });
+
+        objects.push(object);
+    });
+  
+    return objects;
 }

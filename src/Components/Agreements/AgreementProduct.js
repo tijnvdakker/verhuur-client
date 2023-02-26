@@ -3,14 +3,14 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import EditableNumber from "../Helpers/EditableNumber";
 
-function AgreementProduct({agreementProduct, loadAgreementProducts}) {
+function AgreementProduct({agreementProduct, loadAgreements}) {
 
     async function updateAgreementProductDateStart(date) {
         let newDateStart = date.toISOString().split('T')[0];
 
         await postRequest('/agreement/product/update_date_start', { stock_id: agreementProduct.stock_id, date_start: newDateStart });
 
-        await loadAgreementProducts();
+        await loadAgreements();
     }
 
 
@@ -19,7 +19,7 @@ function AgreementProduct({agreementProduct, loadAgreementProducts}) {
 
         await postRequest('/agreement/product/update_date_end', { stock_id: agreementProduct.stock_id, date_end: newDateEnd });
 
-        await loadAgreementProducts();
+        await loadAgreements();
     }
 
     async function updateAgreementProductAmount(event) {
@@ -27,19 +27,25 @@ function AgreementProduct({agreementProduct, loadAgreementProducts}) {
 
         await postRequest('/agreement/product/update_amount', {stock_id: agreementProduct.stock_id, amount});
 
-        await loadAgreementProducts();
+        await loadAgreements();
     }
 
     async function deleteAgreementProduct() {
         await postRequest('/agreement/product/delete', {stock_id: agreementProduct.stock_id});
 
-        await loadAgreementProducts();
+        await loadAgreements();
     }
 
     return <tr key={agreementProduct.stock_id}>
         <td>{agreementProduct.name}</td>
         <td>
+            € {agreementProduct.price}
+        </td>
+        <td>
             <EditableNumber update={updateAgreementProductAmount} defaultValue={agreementProduct.amount} />
+        </td>
+        <td>
+            € {agreementProduct.subtotal}
         </td>
         <td>
             <DatePicker
