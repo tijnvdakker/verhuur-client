@@ -55,7 +55,7 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
                     <select value={selectedProductId} onChange={e => setSelectedProductId(e.target.value)} className="form-control product-select">
                         {
                             products.map(product => {
-                                return <option key={product.product_id} value={product.product_id}>{product.name}</option>
+                                return <option key={product.product_id} disabled={product.current_stock <= 0 ? true : false} value={product.product_id}>{product.name}</option>
                             })
                         }
                     </select>

@@ -3,29 +3,17 @@ import StockGraph from "./StockGraph";
 import { getRequest, postRequest } from "../../Utils";
 
 function StockOverview() {
-    const [products, setProducts] = useState([]);
-    const [selectedProductId, setSelectedProductId] = useState(1);
-    const [mutation, setMutation] = useState(0);
-
     const [stockData, setStockData] = useState({
         labels: [],
         datasets: []
     });
 
-    async function loadProducts() {
-        let result = await getRequest('/products');
+    const [productGroups, setProductGroups] = useState([]);
 
-        setProducts(result.data.products);
-    }
-
-    async function addStock() {
-        await postRequest('/stock/add_mutation', {product_id: selectedProductId, mutation: mutation});
-
-        await loadStock();
-    }
+    const [filterProductGroupId, setFilterProductGroupId] = useState(0);
 
     async function loadStock() {
-        let result = await getRequest('/stock/total');
+        let result = await getRequest(`/stock/total/${filterProductGroupId}`);
 
         let stockData = result.data.stockData;
 
@@ -40,25 +28,31 @@ function StockOverview() {
         })
     }
 
+    async function loadProductGroups() {
+        let result = await getRequest('/product/groups');
+
+        setProductGroups(result.data.productGroups);
+    }
+
     useEffect(() => {
-        loadProducts();
         loadStock();
-    }, []);
+        loadProductGroups();
+    }, [filterProductGroupId]);
 
     return (
         <>
-            <StockGraph stockData={stockData} />
             <div className="form-group">
-                <select value={selectedProductId} onChange={e => setSelectedProductId(e.target.value)} className="form-control product-select">
+                <h3>Filter op productgroep</h3>
+                <select onChange={e => setFilterProductGroupId(e.target.value)} className="form-control" value={filterProductGroupId}>
+                    <option value="0"></option>
                     {
-                        products.map(product => {
-                            return <option value={product.product_id}>{product.name}</option>
+                        productGroups.map(productGroup => {
+                            return <option value={productGroup.product_group_id}>{productGroup.name}</option>
                         })
                     }
                 </select>
-                <input value={mutation} onChange={e => setMutation(e.target.value)} className="form-control" type="number" step="1" />
-                <a onClick={e => addStock()} className="btn btn-primary">+</a>
             </div>
+            <StockGraph stockData={stockData} />
         </>
     )
 }

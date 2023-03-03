@@ -11,6 +11,9 @@ function Sidebar() {
                     <Link to="/products">Producten</Link>
                 </li>
                 <li>
+                    <Link to="/products/groups">Productgroepen</Link>
+                </li>
+                <li>
                     <Link to="/stock">Voorraad</Link>
                 </li>
                 <li>
