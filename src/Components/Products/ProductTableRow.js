@@ -1,6 +1,7 @@
 import EditableText from "../Helpers/EditableText";
 import { postRequest } from "../../Utils";
 import EditableNumber from "../Helpers/EditableNumber";
+import Swal from "sweetalert2";
 
 function ProductTableRow({product, productGroups, loadProducts}) {
 
@@ -18,6 +19,22 @@ function ProductTableRow({product, productGroups, loadProducts}) {
         await postRequest('/product/update_label', {label, product_id: product.product_id});
 
         await loadProducts();
+    }
+
+    async function attemptDeleteProduct() {
+        let result = await Swal.fire({
+            title: 'Bevestiging',
+            text: "Weet je zeker dat je dit product wilt verwijderen?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Verwijderen'
+        });
+
+        if (result.isConfirmed) {
+            await deleteProduct();
+        }
     }
 
     async function deleteProduct() {
@@ -59,9 +76,7 @@ function ProductTableRow({product, productGroups, loadProducts}) {
                     </select>
                 </div>
             </td>
-            <td><span className="badge bg-primary">{product.current_stock}</span></td>
-            <td><span className="badge bg-info">{product.total_stock}</span></td>
-            <td><a onClick={e => deleteProduct()} className="btn btn-danger"><i className="las la-trash"></i></a></td>
+            <td><a onClick={e => attemptDeleteProduct()} className="btn btn-danger"><i className="las la-trash"></i></a></td>
         </tr>
     )
 }

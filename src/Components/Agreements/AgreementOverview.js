@@ -1,6 +1,7 @@
 import AgreementDetails from "./AgreementDetails";
 import { useState, useEffect } from "react";
 import { getRequest, postRequest } from "../../Utils";
+import Swal from "sweetalert2";
 
 function AgreementOverview() {
     const [agreements, setAgreements] = useState([]);
@@ -27,6 +28,12 @@ function AgreementOverview() {
         await postRequest('/agreement/add');
 
         await loadAgreements();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Gelukt!',
+            text: 'Overeenkomt is aangemaakt!'
+        });
     }
 
     return (
@@ -35,7 +42,7 @@ function AgreementOverview() {
         <div className="agreements">
             {
                 agreements.map(agreement => {
-                    return <AgreementDetails key={agreement.agreement_id} products={products} agreement={agreement} loadAgreements={loadAgreements} />
+                    return <AgreementDetails loadProducts={loadProducts} key={agreement.agreement_id} products={products} agreement={agreement} loadAgreements={loadAgreements} />
                 })
             }
         </div>

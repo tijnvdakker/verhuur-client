@@ -5,9 +5,6 @@ function Sidebar() {
         <nav>
             <ul>
                 <li>
-                    <Link to="/">Dashboard</Link>
-                </li>
-                <li>
                     <Link to="/products">Producten</Link>
                 </li>
                 <li>
@@ -15,6 +12,9 @@ function Sidebar() {
                 </li>
                 <li>
                     <Link to="/stock">Voorraad</Link>
+                </li>
+                <li>
+                    <Link to="/stock/graph">Grafiek</Link>
                 </li>
                 <li>
                     <Link to="/agreements">Overeenkomsten</Link>

@@ -3,11 +3,17 @@ import { objectArrayFromConcatenatedString, postRequest } from "../../Utils";
 import { useState } from "react";
 import AgreementProduct from "./AgreementProduct";
 import EditableNumber from "../Helpers/EditableNumber";
+import Select from 'react-select';
+import Swal from "sweetalert2";
 
-function AgreementDetails({ products, agreement, loadAgreements }) {
+function AgreementDetails({ products, agreement, loadAgreements, loadProducts }) {
     let [selectedProductId, setSelectedProductId] = useState(1);
 
     let agreementProducts = objectArrayFromConcatenatedString(agreement.agreement_products);
+
+    products = products.map(product => {
+        return {...product, value: product.product_id, label: product.name + ` (${product.current_stock})`};
+    });
 
     async function updateAgreementDescription(event) {
         let description = event.target.value;
@@ -29,6 +35,26 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
         await postRequest('/agreement/add_product', { agreement_id: agreement.agreement_id, product_id: selectedProductId });
 
         await loadAgreements();
+
+        await loadProducts();
+
+        setSelectedProductId(1);
+    }
+
+    async function attemptDeleteAgreement() {
+        let result = await Swal.fire({
+            title: 'Bevestiging',
+            text: "Weet je zeker dat je deze overeenkomst wilt verwijderen?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Verwijderen'
+        });
+
+        if (result.isConfirmed) {
+            await deleteAgreement();
+        }
     }
 
     async function deleteAgreement() {
@@ -38,12 +64,12 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
     }
 
     return (
-        <div className="card bg-dark">
+        <div className="card">
             <div className="card-header">
                 <div>
                     <h4 className="agreement-header">
                         <EditableText update={updateAgreementDescription} defaultValue={agreement.description} /> &nbsp; (<i className="las la-pen"></i>) 
-                        <a onClick={e => deleteAgreement()} className="btn btn-danger"><i className="las la-trash"></i></a>
+                        <a onClick={e => attemptDeleteAgreement()} className="btn btn-danger"><i className="las la-trash"></i></a>
                     </h4>
                     <div className="flex">
                         <span className="margin-right-50">Borg (€) (<i className="las la-pen"></i>)</span>
@@ -51,14 +77,8 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label><b>Selecteer product</b></label>
-                    <select value={selectedProductId} onChange={e => setSelectedProductId(e.target.value)} className="form-control product-select">
-                        {
-                            products.map(product => {
-                                return <option key={product.product_id} disabled={product.current_stock <= 0 ? true : false} value={product.product_id}>{product.name}</option>
-                            })
-                        }
-                    </select>
+                    <label><b>Product(en) toevoegen</b></label>
+                    <Select isSearchable options={products} isOptionDisabled={(product) => product.current_stock <= 0} defaultValue={selectedProductId} onChange={product => setSelectedProductId(product.product_id)} />
                     <a onClick={e => addAgreementProduct()} className="btn btn-primary">+</a>
                 </div>
             </div>
@@ -78,7 +98,7 @@ function AgreementDetails({ products, agreement, loadAgreements }) {
                     <tbody>
                         {
                             agreementProducts.map(agreementProduct => {
-                                return <AgreementProduct key={agreementProduct.stock_id} agreementProduct={agreementProduct} loadAgreements={loadAgreements} />
+                                return <AgreementProduct loadProducts={loadProducts} key={agreementProduct.stock_id} agreementProduct={agreementProduct} loadAgreements={loadAgreements} />
                             })
                         }
                     </tbody>
