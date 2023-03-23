@@ -29,7 +29,7 @@ export async function postRequest(url, data = {}) {
         Swal.fire({
             icon: 'error',
             title: 'Whoops',
-            text: error.response.data.message
+            text: error.response.data
         });
     }   
    

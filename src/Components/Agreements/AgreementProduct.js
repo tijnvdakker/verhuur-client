@@ -2,8 +2,9 @@ import { postRequest } from "../../Utils";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import EditableNumber from "../Helpers/EditableNumber";
+import Swal from "sweetalert2";
 
-function AgreementProduct({agreementProduct, loadAgreements}) {
+function AgreementProduct({agreementProduct, loadAgreements, loadProducts}) {
 
     async function updateAgreementProductDateStart(date) {
         let newDateStart = date.toISOString().split('T')[0];
@@ -12,7 +13,6 @@ function AgreementProduct({agreementProduct, loadAgreements}) {
 
         await loadAgreements();
     }
-
 
     async function updateAgreementProductDateEnd(date) {
         let newDateEnd = date.toISOString().split('T')[0];
@@ -28,6 +28,8 @@ function AgreementProduct({agreementProduct, loadAgreements}) {
         await postRequest('/agreement/product/update_amount', {stock_id: agreementProduct.stock_id, amount});
 
         await loadAgreements();
+
+        await loadProducts();
     }
 
     async function deleteAgreementProduct() {

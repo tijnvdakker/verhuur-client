@@ -8,7 +8,6 @@
 
 .card {
   margin-bottom: 50px;
-  color: white;
 }
 
 .card-header {
@@ -26,12 +25,38 @@
 
 .content {
   width: calc(100% - var(--sidebar-width));
+  height: 100vh;
+  padding: 20px;
+  overflow: auto;
 }
 
 nav {
   display: block;
   width: var(--sidebar-width);
-  height: 100%;
+  height: 100vh;
+  background-color: lightblue;
+  position: static;
+}
+
+nav ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+nav ul li {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+nav ul li:hover {
+  background-color: darkcyan;
+}
+
+nav ul li a {
+  color: white !important;
+  text-decoration: none !important;
 }
 
 .product-table tr td:first-child, .agreement-product-table tr td:first-child {
@@ -69,3 +94,11 @@ nav {
   margin-left: 30px;
 }
 
+.editable-text, .editable-number {
+  min-width: 25px;
+  min-height: 15px;
+}
+
+.chart-container {
+  max-height: 80%;
+}
