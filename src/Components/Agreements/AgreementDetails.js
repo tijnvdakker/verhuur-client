@@ -6,14 +6,10 @@ import EditableNumber from "../Helpers/EditableNumber";
 import Select from 'react-select';
 import Swal from "sweetalert2";
 
-function AgreementDetails({ products, agreement, loadAgreements, loadProducts }) {
-    let [selectedProductId, setSelectedProductId] = useState(1);
+function AgreementDetails({ products, agreement, loadAgreements, loadProducts, clients }) {
+    let [selectedProduct, setSelectedProduct] = useState({product_id: 0, name: ''});
 
     let agreementProducts = objectArrayFromConcatenatedString(agreement.agreement_products);
-
-    products = products.map(product => {
-        return {...product, value: product.product_id, label: product.name + ` (${product.current_stock})`};
-    });
 
     async function updateAgreementDescription(event) {
         let description = event.target.value;
@@ -32,13 +28,19 @@ function AgreementDetails({ products, agreement, loadAgreements, loadProducts })
     }
 
     async function addAgreementProduct() {
-        await postRequest('/agreement/add_product', { agreement_id: agreement.agreement_id, product_id: selectedProductId });
+        await postRequest('/agreement/add_product', { agreement_id: agreement.agreement_id, product_id: selectedProduct.product_id });
 
         await loadAgreements();
 
         await loadProducts();
 
-        setSelectedProductId(1);
+        setSelectedProduct({product_id: 0, label: ''});
+    }
+
+    async function setLinkedClient(client_id) {
+        await postRequest('/agreement/link_client', {client_id, agreement_id: agreement.agreement_id});
+
+        await loadAgreements();
     }
 
     async function attemptDeleteAgreement() {
@@ -75,11 +77,21 @@ function AgreementDetails({ products, agreement, loadAgreements, loadProducts })
                         <span className="margin-right-50">Borg (€) (<i className="las la-pen"></i>)</span>
                         <EditableNumber update={updateAgreementDeposit} defaultValue={agreement.deposit} />
                     </div>
+                    <div className="flex" style={{alignItems: 'center', marginTop: '20px'}}>
+                        <span className="margin-right-50">Klant:</span>
+                        <div style={{minWidth: '200px'}}>
+                            <Select isSearchable options={clients} value={{value: agreement.client_id, label: agreement.client}} onChange={client => setLinkedClient(client.client_id)} />
+                        </div>
+                    </div>
                 </div>
                 <div className="form-group">
                     <label><b>Product(en) toevoegen</b></label>
-                    <Select isSearchable options={products} isOptionDisabled={(product) => product.current_stock <= 0} defaultValue={selectedProductId} onChange={product => setSelectedProductId(product.product_id)} />
-                    <a onClick={e => addAgreementProduct()} className="btn btn-primary">+</a>
+                    <div className="flex">
+                        <div style={{minWidth: '200px', marginRight: '20px'}}>
+                            <Select isSearchable options={products} isOptionDisabled={(product) => product.current_stock <= 0} defaultValue={{value: selectedProduct.product_id, label: selectedProduct.name}} onChange={product => setSelectedProduct(product)} />
+                        </div>
+                        <a onClick={e => addAgreementProduct()} className="btn btn-primary">+</a>
+                    </div>
                 </div>
             </div>
             <div className="card-body">

@@ -64,12 +64,15 @@ function StockGraphOverview() {
     return (
         <>
             <div className="form-group">
-                <h3>Filteren</h3>
-                <div style={{width: '200px'}}>
-                    <b>Productgroep</b>
-                    <Select options={productGroups} isSearchable isClearable onChange={productGroup => setFilterProductGroupId(productGroup.product_group_id)} />
-                    <b>Product</b>
-                    <Select options={products} isSearchable isClearable onChange={product => setFilterProductId(product.product_id)} />
+                <div style={{width: '800px', display: 'flex'}}>
+                    <div style={{marginRight: '25px'}}>
+                        <b>Productgroep</b>
+                        <Select options={productGroups} isSearchable onChange={productGroup => setFilterProductGroupId(productGroup.product_group_id)} />
+                    </div>
+                    <div>
+                        <b>Product</b>
+                        <Select options={products} isSearchable onChange={product => setFilterProductId(product.product_id)} />
+                    </div>
                 </div>
                 
             </div>

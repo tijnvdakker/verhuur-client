@@ -93,3 +93,12 @@ nav ul li a {
 .agreement-header a {
   margin-left: 30px;
 }
+
+.editable-text, .editable-number {
+  min-width: 25px;
+  min-height: 15px;
+}
+
+.chart-container {
+  max-height: 80%;
+}

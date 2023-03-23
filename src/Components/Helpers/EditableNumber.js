@@ -18,7 +18,7 @@ function EditableNumber({defaultValue, update}) {
     }
 
     return (
-        <div onClick={e => {e.preventDefault(); setEditable(true)}}>{defaultValue}</div>
+        <div className="editable-number" onClick={e => {e.preventDefault(); setEditable(true)}}>{defaultValue}</div>
     )
 }
 

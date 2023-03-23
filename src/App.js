@@ -7,6 +7,7 @@ import DashboardOverview from './Components/Dashboard/DashboardOverview';
 import StockGraphOverview from './Components/Stock/StockGraphOverview';
 import ProductGroupOverview from './Components/Products/ProductGroupOverview';
 import StockOverview from './Components/Stock/StockOverview';
+import ClientOverview from './Components/Clients/ClientOverview';
 
 function App() {
  
@@ -17,6 +18,7 @@ function App() {
           <Route index element={<ProductOverview />} />
           <Route path="products" element={<ProductOverview />} />
           <Route path="products/groups" element={<ProductGroupOverview />} />
+          <Route path="clients" element={<ClientOverview />} />
           <Route path="stock" element={<StockOverview />} />
           <Route path="stock/graph" element={<StockGraphOverview />} />
           <Route path="agreements" element={<AgreementOverview />} />

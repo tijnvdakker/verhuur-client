@@ -8,7 +8,7 @@ function StockOverview() {
 
     useEffect(() => {
         loadProducts();
-    }, []);
+    }, [products]);
 
     async function loadProducts() {
         let result = await getRequest('/products');

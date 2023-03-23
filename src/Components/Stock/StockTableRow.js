@@ -9,7 +9,7 @@ function StockTableRow({ product, loadProducts }) {
     let [description, setDescription] = useState("");
     let [history, setHistory] = useState([]);
 
-    useEffect(() => { getProductHistory() });
+    useEffect(() => { getProductHistory() }, [history]);
 
     async function addStock() {
         await postRequest('/stock/add_mutation', {product_id: product.product_id, mutation: amount, description});

@@ -66,7 +66,7 @@ function ProductTableRow({product, productGroups, loadProducts}) {
             <td><EditableNumber update={updateProductPrice} defaultValue={product.price} /></td>
             <td>
                 <div className="form-group">
-                    <select onChange={e => updateLinkedProductGroup(e)} className="form-control" value={product.product_group_id}>
+                    <select onChange={e => updateLinkedProductGroup(e)} className="form-control" value={product.product_group_id ?? 0}>
                         <option value="0"></option>
                         {
                             productGroups.map(productGroup => {

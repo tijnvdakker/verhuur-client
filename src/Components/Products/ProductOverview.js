@@ -37,7 +37,7 @@ function ProductOverview() {
                     <tr>
                         <th>Naam (<i className="las la-pen"></i>)</th>
                         <th>Label (<i className="las la-pen"></i>)</th>
-                        <th>Prijs (<i className="las la-pen"></i>)</th>
+                        <th>Prijs (€) (<i className="las la-pen"></i>)</th>
                         <th>Productgroep (<i className="las la-pen"></i>)</th>
                         <th>&nbsp;</th>
                     </tr>
